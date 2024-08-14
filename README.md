@@ -16,11 +16,11 @@ This is a web application built using React.js. It utilizes React Routing for na
 ## Getting Started
 1. Clone the repository:
    ```
-   git clone https://github.com/yourusername/project01-car-analytics.git
+   git clone https://github.com/yourusername/car-analytics.git
    ```
 2. Navigate to the project directory:
    ```
-   cd project01-car-analytics
+   cd car-analytics
    ```
 3. Install dependencies:
    ```
