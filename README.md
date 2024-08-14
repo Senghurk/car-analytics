@@ -24,14 +24,14 @@ This is a web application built using React.js. It utilizes React Routing for na
    ```
 3. Install dependencies:
    ```
-   npm install
+   pnpm install
    ```
    
 4. Start the development server:
    ```
-   npm start
+   pnpm run dev
    ```
-5. Open your browser and visit `http://localhost:3000` to view the app.
+5. Open your browser and visit `http://localhost:xxxx` to view the app.
 
 ## Technologies Used
 * React.js
