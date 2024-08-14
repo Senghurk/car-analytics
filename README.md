@@ -11,9 +11,13 @@ This is a web application built using React.js. It utilizes React Routing for na
 - **Local Storage**: Data persistence is achieved through the use of the browser's Local Storage, allowing the app to maintain state between sessions.
 - **No Backend**: This app operates entirely on the client-side, with no server-side components.
 - **JSON Data Source**: All data used in the application is sourced from a provided JSON file.
+-**Data Visualization**: The app uses Chart.js to create interactive and responsive charts:
+    -A pie chart showing the proportion of cars by brand
+    -A stacked bar chart displaying the models of each brand
 
 ## Technologies Used
 - React.js
+- Chart.js
 - React Router
 - HTML5 Local Storage
 - JSON
