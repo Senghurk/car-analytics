@@ -16,7 +16,7 @@ This is a web application built using React.js. It utilizes React Routing for na
 ## Getting Started
 1. Clone the repository:
    ```
-   git clone https://github.com/yourusername/car-analytics.git
+   git clone https://github.com/senghurk/car-analytics.git
    ```
 2. Navigate to the project directory:
    ```
