@@ -11,7 +11,6 @@ function Dashboard() {
   const [modelData, setModelData] = useState({});
 
   useEffect(() => {
-    // Process car data
     const brands = {};
     const models = {};
 
@@ -42,19 +41,28 @@ function Dashboard() {
         data: Object.values(brandData).map(brand => brand.count),
         backgroundColor: [
           '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40',
-          '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40',
         ],
       },
     ],
   };
 
+  const pieChartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: 'bottom',
+      },
+    },
+  };
+
   const barChartData = {
-    labels: Object.keys(modelData).map(brandId => brandData[brandId].name),
-    datasets: [{
-      label: 'Number of Models',
-      data: Object.keys(modelData).map(brandId => Object.keys(modelData[brandId]).length),
+    labels: Object.keys(modelData).map(brandId => brandData[brandId]?.name),
+    datasets: Object.keys(modelData).map(brandId => ({
+      label: brandData[brandId]?.name,
+      data: Object.values(modelData[brandId]).map(model => model.count),
       backgroundColor: 'rgba(75, 192, 192, 0.6)',
-    }],
+    })),
   };
 
   const barChartOptions = {
@@ -65,12 +73,17 @@ function Dashboard() {
     },
     responsive: true,
     maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: 'top',
+      },
+    },
   };
 
   return (
     <div className={styles.dashboard}>
       <h1 className={styles.title}>Car Market Dashboard</h1>
-      
+
       <div className={styles.tableContainer}>
         <table className={styles.table}>
           <thead>
@@ -90,7 +103,7 @@ function Dashboard() {
                   <td>{brand.count}</td>
                   <td>{brand.value.toLocaleString()}</td>
                 </tr>
-                {Object.values(modelData[brandId]).map(model => (
+                {Object.values(modelData[brandId] || {}).map(model => (
                   <tr key={`${brandId}-${model.name}`} className={styles.modelRow}>
                     <td>-</td>
                     <td>{model.name}</td>
@@ -108,7 +121,7 @@ function Dashboard() {
         <div className={styles.chartWrapper}>
           <h2>Cars by Brand</h2>
           <div className={styles.pieChart}>
-            <Pie data={pieChartData} options={{ responsive: true, maintainAspectRatio: false }} />
+            <Pie data={pieChartData} options={pieChartOptions} />
           </div>
         </div>
 

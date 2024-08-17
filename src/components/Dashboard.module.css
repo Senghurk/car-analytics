@@ -1,32 +1,75 @@
-.title {
-    color: #1976d2;
-    margin-bottom: 20px;
-    text-align: center;
-  }
-  
-  .tableContainer {
-    overflow-x: auto;
-    margin-top: 20px;
-    margin-bottom: 20px;
-  }
-  
-  .chartsContainer {
-    display: flex;
-    justify-content: space-around;
-    margin-top: 20px;
-  }
-  
-  .chartWrapper {
-    width: 45%;
-    background-color: #fff;
+.dashboard {
     padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  }
-  
-  .pieChart,
-  .barChart {
+}
+
+.title {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #333;
+    font-size: 28px;
+}
+
+.tableContainer {
+    margin-bottom: 40px;
+    overflow-x: auto;
+}
+
+.table {
     width: 100%;
+    border-collapse: collapse;
+    background-color: #ffffff;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.table th, .table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.table th {
+    background-color: #4a90e2;
+    color: white;
+    font-weight: 600;
+}
+
+.table tr:nth-child(even) {
+    background-color: #f8f9fa;
+}
+
+.table tr:hover {
+    background-color: #e9ecef;
+}
+
+.brandRow {
+    font-weight: bold;
+    color: #31708f; /* Darker blue text color */
+}
+
+.modelRow {
+    background-color: #f5f5f5; /* Light grey background for model rows */
+}
+
+.chartsContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    gap: 20px;
+}
+
+.chartWrapper {
+    flex: 1;
+    min-width: 300px;
+    max-width: 600px;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    margin-bottom: 30px;
+}
+
+.pieChart, .barChart {
+    position: relative;
     height: 300px;
-  }
-  
+    width: 100%;
+}
