@@ -1,0 +1,45 @@
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 30px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  }
+  
+  .table th, .table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #e0e0e0;
+  }
+  
+  .table th {
+    background-color: #4a90e2;
+    color: white;
+    font-weight: 600;
+  }
+  
+  .table tr:nth-child(even) {
+    background-color: #f8f9fa;
+  }
+  
+  .table tr:hover {
+    background-color: #e9ecef;
+  }
+  
+  .chartContainer {
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    margin-bottom: 30px;
+  }
+  
+  .pieChart {
+    width: 60%;
+    margin: 0 auto;
+  }
+  
+  .barChart {
+    width: 80%;
+    margin: 0 auto;
+  }
