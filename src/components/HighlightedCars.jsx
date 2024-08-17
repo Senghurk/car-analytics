@@ -1,54 +1,41 @@
 import React, { useState, useEffect } from 'react';
 import carData from '../data/taladrod-cars.min.json';
+import styles from './HighlightedCars.module.css';
 
 function HighlightedCars() {
   const [highlightedCars, setHighlightedCars] = useState([]);
-  const [availableCars, setAvailableCars] = useState([]);
 
   useEffect(() => {
     const storedHighlightedCars = JSON.parse(localStorage.getItem('highlightedCars')) || [];
     setHighlightedCars(storedHighlightedCars);
-    setAvailableCars(carData.Cars.filter(car => !storedHighlightedCars.includes(car.Cid)));
   }, []);
 
-  const addHighlightedCar = (car) => {
-    const updatedHighlightedCars = [...highlightedCars, car.Cid];
-    setHighlightedCars(updatedHighlightedCars);
-    setAvailableCars(availableCars.filter(c => c.Cid !== car.Cid));
-    localStorage.setItem('highlightedCars', JSON.stringify(updatedHighlightedCars));
-  };
-
-  const removeHighlightedCar = (car) => {
-    const updatedHighlightedCars = highlightedCars.filter(cid => cid !== car.Cid);
-    setHighlightedCars(updatedHighlightedCars);
-    setAvailableCars([...availableCars, car]);
-    localStorage.setItem('highlightedCars', JSON.stringify(updatedHighlightedCars));
+  const toggleHighlight = (carId) => {
+    setHighlightedCars(prev => {
+      const newHighlightedCars = prev.includes(carId)
+        ? prev.filter(id => id !== carId)
+        : [...prev, carId];
+      
+      localStorage.setItem('highlightedCars', JSON.stringify(newHighlightedCars));
+      return newHighlightedCars;
+    });
   };
 
   return (
-    <div>
+    <div className={styles.highlightedCars}>
       <h1>Highlighted Cars</h1>
-      <div>
-        <h2>Highlighted</h2>
-        <ul>
-          {carData.Cars.filter(car => highlightedCars.includes(car.Cid)).map(car => (
-            <li key={car.Cid}>
-              {car.Model} - {car.NameMMT} - {car.Prc}
-              <button onClick={() => removeHighlightedCar(car)}>Remove</button>
-            </li>
-          ))}
-        </ul>
-      </div>
-      <div>
-        <h2>Available Cars</h2>
-        <ul>
-          {availableCars.map(car => (
-            <li key={car.Cid}>
-              {car.Model} - {car.NameMMT} - {car.Prc}
-              <button onClick={() => addHighlightedCar(car)}>Add</button>
-            </li>
-          ))}
-        </ul>
+      <div className={styles.carList}>
+        {carData.Cars.map(car => (
+          <div key={car.Cid} className={styles.carItem}>
+            <span>{car.Model} - {car.NameMMT}</span>
+            <button 
+              onClick={() => toggleHighlight(car.Cid)}
+              className={highlightedCars.includes(car.Cid) ? styles.highlighted : ''}
+            >
+              {highlightedCars.includes(car.Cid) ? 'Remove Highlight' : 'Highlight'}
+            </button>
+          </div>
+        ))}
       </div>
     </div>
   );
