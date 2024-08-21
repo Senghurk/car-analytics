@@ -1,42 +1,93 @@
+/* Center the page content horizontally */
+.pageContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center horizontally */
+  justify-content: center; /* Center vertically */
+  min-height: 100vh; /* Full viewport height */
+  padding: 20px; /* Optional padding */
+  background-color: #f0f0f0; /* Optional: background color for the page */
+}
+
+/* Section for highlighted cars */
+.highlightedSection {
+  width: 100%; /* Ensures the content takes up full width */
+  max-width: 1200px; /* Optional: sets a max width for the content */
+  padding: 20px;
+  box-sizing: border-box; /* Ensures padding is included in the width */
+  background-color: #fff;
+  border-bottom: 2px solid #1976d2; /* Separator line color */
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  position: relative;
+}
+
+.highlightedSection h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #1976d2; /* Highlight color */
+}
+
+.highlightedCarsList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center; /* Center horizontally within highlightedCarsList */
+}
+
+.highlightedCarsList .carItem {
+  border: 2px solid #1976d2; /* Border color for highlighted cars */
+  border-radius: 8px;
+}
+
+/* General styles for all cars */
 .carList {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-  }
-  
-  .carItem {
-    background-color: #f5f5f5;
-    border-radius: 8px;
-    padding: 15px;
-    width: 200px;
-    text-align: center;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    transition: transform 0.3s ease;
-  }
-  
-  .carItem:hover {
-    transform: translateY(-5px);
-  }
-  
-  .carItem button {
-    background-color: #1976d2;
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .carItem button:hover {
-    background-color: #004ba0;
-  }
-  
-  .carItem button.highlighted {
-    background-color: #d32f2f;
-  }
-  
-  .carItem button.highlighted:hover {
-    background-color: #9a0007;
-  }
-  
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center; /* Center horizontally within carList */
+}
+
+.carItem {
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  padding: 15px;
+  width: 200px;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease;
+}
+
+.carItem:hover {
+  transform: translateY(-5px);
+}
+
+.carItem button {
+  background-color: #1976d2;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.carItem button:hover {
+  background-color: #004ba0;
+}
+
+.carItem button.highlighted {
+  background-color: #d32f2f;
+}
+
+.carItem button.highlighted:hover {
+  background-color: #9a0007;
+}
+
+.carImage {
+  width: 200px; /* Set the width you desire */
+  height: 150px; /* Set the height you desire */
+  object-fit: cover;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
