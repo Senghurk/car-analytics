@@ -4,9 +4,9 @@
 
 This is the project-01 for WAD 1/2024. The Car Analytics Dashboard is a web-based application designed to provide insightful analytics and visualization of car market data. The web-app is only for the market owner (not buyers or sellers). 
 
-## Screenshots
+## Screenshots. 
 
-### Dashboard Overview
+### Dashboard Overview. 
 - Dashboard showing car analytics
 ![Dashboard Overview](screenshots/dashboard1.png "Dashboard showing car analytics")
 
