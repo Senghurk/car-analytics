@@ -2,7 +2,7 @@
 
 ## Description
 
-This is the project01 for WAD 1/2024. The Car Analytics Dashboard is a web-based application designed to provide insightful analytics and visualization of car market data.
+This is the project-01 for WAD 1/2024. The Car Analytics Dashboard is a web-based application designed to provide insightful analytics and visualization of car market data. The web-app is only for the market owner (not buyers or sellers). 
 
 ## Screenshots
 
@@ -65,7 +65,7 @@ This is the project01 for WAD 1/2024. The Car Analytics Dashboard is a web-based
    pnpm run dev
    ```
 
-5. Open your browser and visit `http://localhost:5173` to view the application.
+5. Open your browser and visit `http://localhost:xxxx` to view the application.
 
 ## Deployment
 
@@ -80,7 +80,7 @@ This project is configured for deployment on GitHub Pages. To deploy:
 
 This will build the project and push it to the `gh-pages` branch of your repository.
 
-## Team Members
+## Contributors
 
 - Sai Oan Hseng Hurk - 6440041
 - Aung Khant         - 6511724 
