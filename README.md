@@ -76,9 +76,9 @@ This will build the project and push it to the `gh-pages` branch of your reposit
 
 ## Team Members
 
-Sai Oan Hseng Hurk - 6440041
-Aung Khant         - 6511724 
-Kaung Myat Min     - 6511149 
+- Sai Oan Hseng Hurk - 6440041
+- Aung Khant         - 6511724 
+- Kaung Myat Min     - 6511149 
  
 
 ## License
