@@ -1,139 +1,235 @@
-import React, { useState, useEffect } from 'react';
-import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement } from 'chart.js';
-import { Pie, Bar } from 'react-chartjs-2';
+import React, { useState, useEffect, useRef } from 'react';
+import {
+  Chart as ChartJS,
+  ArcElement,
+  Tooltip,
+  Legend,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  PieController,
+  BarController
+} from 'chart.js';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 import carData from '../data/taladrod-cars.min.json';
-import styles from './Dashboard.module.css';
 
-ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement);
+ChartJS.register(
+  ArcElement,
+  Tooltip,
+  Legend,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  PieController,
+  BarController
+);
 
-function Dashboard() {
+const Dashboard = () => {
   const [brandData, setBrandData] = useState({});
-  const [modelData, setModelData] = useState({});
+  const [expandedBrands, setExpandedBrands] = useState({});
+  const pieChartRef = useRef(null);
+  const barChartRef = useRef(null);
 
   useEffect(() => {
-    const brands = {};
-    const models = {};
+    const processedData = {};
 
     carData.Cars.forEach(car => {
-      if (!brands[car.MkID]) {
-        brands[car.MkID] = { count: 0, value: 0, name: car.Model };
+      if (!processedData[car.MkID]) {
+        processedData[car.MkID] = {
+          name: car.Model,
+          count: 0,
+          value: 0,
+          models: {}
+        };
       }
-      brands[car.MkID].count++;
-      brands[car.MkID].value += parseInt(car.Prc.replace(/,/g, ''), 10);
 
-      if (!models[car.MkID]) {
-        models[car.MkID] = {};
+      processedData[car.MkID].count++;
+      processedData[car.MkID].value += parseInt(car.Prc.replace(/,/g, ''), 10);
+
+      if (!processedData[car.MkID].models[car.MdID]) {
+        processedData[car.MkID].models[car.MdID] = {
+          name: car.NameMMT,
+          count: 0,
+          value: 0
+        };
       }
-      if (!models[car.MkID][car.MdID]) {
-        models[car.MkID][car.MdID] = { count: 0, name: car.NameMMT };
-      }
-      models[car.MkID][car.MdID].count++;
+
+      processedData[car.MkID].models[car.MdID].count++;
+      processedData[car.MkID].models[car.MdID].value += parseInt(car.Prc.replace(/,/g, ''), 10);
     });
 
-    setBrandData(brands);
-    setModelData(models);
+    setBrandData(processedData);
   }, []);
 
-  const pieChartData = {
-    labels: Object.values(brandData).map(brand => brand.name),
-    datasets: [
-      {
-        data: Object.values(brandData).map(brand => brand.count),
-        backgroundColor: [
-          '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40',
-        ],
-      },
-    ],
+  useEffect(() => {
+    if (Object.keys(brandData).length > 0) {
+      renderCharts();
+    }
+  }, [brandData]);
+
+  const toggleBrand = (brandId) => {
+    setExpandedBrands(prev => ({
+      ...prev,
+      [brandId]: !prev[brandId]
+    }));
   };
 
-  const pieChartOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: {
-        position: 'bottom',
-      },
-    },
+  const renderCharts = () => {
+    const brands = Object.values(brandData);
+    const colors = generateColors(brands.length);
+
+    if (pieChartRef.current) {
+      new ChartJS(pieChartRef.current, {
+        type: 'pie',
+        data: {
+          labels: brands.map(brand => brand.name),
+          datasets: [{
+            data: brands.map(brand => brand.count),
+            backgroundColor: colors,
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              position: 'bottom',
+            },
+            title: {
+              display: true,
+              text: 'Cars by Brand',
+              align: 'center',
+              font: {
+                size: 20,
+                weight: 'bold'
+              },
+              padding: {
+                top: 10,
+                bottom: 30
+              }
+            }
+          }
+        }
+      });
+    }
+
+    if (barChartRef.current) {
+      new ChartJS(barChartRef.current, {
+        type: 'bar',
+        data: {
+          labels: brands.map(brand => brand.name),
+          datasets: brands.flatMap(brand =>
+            Object.values(brand.models).map(model => ({
+              label: model.name,
+              data: brands.map(b => b.name === brand.name ? model.count : 0),
+              backgroundColor: colors[brands.indexOf(brand)],
+            }))
+          )
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: {
+              stacked: true,
+            },
+            y: {
+              stacked: true,
+              beginAtZero: true,
+            }
+          },
+          plugins: {
+            legend: {
+              display: false
+            },
+            title: {
+              display: true,
+              text: 'Models by Brand',
+              align: 'center',
+              font: {
+                size: 20,
+                weight: 'bold'
+              },
+              padding: {
+                top: 10,
+                bottom: 30
+              }
+            }
+          }
+        }
+      });
+    }
   };
 
-  const barChartData = {
-    labels: Object.keys(modelData).map(brandId => brandData[brandId]?.name),
-    datasets: Object.keys(modelData).map(brandId => ({
-      label: brandData[brandId]?.name,
-      data: Object.values(modelData[brandId]).map(model => model.count),
-      backgroundColor: 'rgba(75, 192, 192, 0.6)',
-    })),
-  };
 
-  const barChartOptions = {
-    scales: {
-      y: {
-        beginAtZero: true,
-      },
-    },
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: {
-        position: 'top',
-      },
-    },
+  const generateColors = (count) => {
+    const colors = [];
+    for (let i = 0; i < count; i++) {
+      colors.push(`hsl(${(i * 360) / count}, 70%, 50%)`);
+    }
+    return colors;
   };
 
   return (
-    <div className={styles.dashboard}>
-      <h1 className={styles.title}>Car Market Dashboard</h1>
+    <div style={{ padding: '16px' }}>
+      <h1 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '16px' }}>Car Market Dashboard</h1>
 
-      <div className={styles.tableContainer}>
-        <table className={styles.table}>
-          <thead>
-            <tr>
-              <th>Brand</th>
-              <th>Model</th>
-              <th>Count</th>
-              <th>Value (Baht)</th>
-            </tr>
-          </thead>
-          <tbody>
-            {Object.entries(brandData).map(([brandId, brand]) => (
-              <React.Fragment key={brandId}>
-                <tr className={styles.brandRow}>
-                  <td>{brand.name}</td>
-                  <td>-</td>
-                  <td>{brand.count}</td>
-                  <td>{brand.value.toLocaleString()}</td>
-                </tr>
-                {Object.values(modelData[brandId] || {}).map(model => (
-                  <tr key={`${brandId}-${model.name}`} className={styles.modelRow}>
-                    <td>-</td>
-                    <td>{model.name}</td>
-                    <td>{model.count}</td>
-                    <td>-</td>
-                  </tr>
-                ))}
-              </React.Fragment>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      <div className={styles.chartsContainer}>
-        <div className={styles.chartWrapper}>
-          <h2>Cars by Brand</h2>
-          <div className={styles.pieChart}>
-            <Pie data={pieChartData} options={pieChartOptions} />
+      {Object.keys(brandData).length === 0 ? (
+        <div>Loading data...</div>
+      ) : (
+        <>
+          <div style={{ marginBottom: '32px' }}>
+            <TableContainer component={Paper}>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Brand/Model</TableCell>
+                    <TableCell align="right">Number</TableCell>
+                    <TableCell align="right">Value (THB)</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {Object.entries(brandData).map(([brandId, brand]) => (
+                    <React.Fragment key={brandId}>
+                      <TableRow onClick={() => toggleBrand(brandId)} style={{ cursor: 'pointer' }}>
+                        <TableCell>
+                          <span style={{ marginRight: '8px' }}>{expandedBrands[brandId] ? '▼' : '►'}</span>
+                          {brand.name}
+                        </TableCell>
+                        <TableCell align="right">{brand.count}</TableCell>
+                        <TableCell align="right">{brand.value.toLocaleString()}</TableCell>
+                      </TableRow>
+                      {expandedBrands[brandId] && Object.entries(brand.models).map(([modelId, model]) => (
+                        <TableRow key={`${brandId}-${modelId}`} style={{ backgroundColor: '#f5f5f5' }}>
+                          <TableCell style={{ paddingLeft: '32px' }}>{model.name}</TableCell>
+                          <TableCell align="right">{model.count}</TableCell>
+                          <TableCell align="right">{model.value.toLocaleString()}</TableCell>
+                        </TableRow>
+                      ))}
+                    </React.Fragment>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
           </div>
-        </div>
 
-        <div className={styles.chartWrapper}>
-          <h2>Models by Brand</h2>
-          <div className={styles.barChart}>
-            <Bar data={barChartData} options={barChartOptions} />
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '32px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <div style={{ height: '400px', width: '100%' }}>
+                <canvas ref={pieChartRef}></canvas>
+              </div>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <div style={{ height: '400px', width: '100%' }}>
+                <canvas ref={barChartRef}></canvas>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
+        </>
+      )}
     </div>
   );
-}
+};
 
 export default Dashboard;
