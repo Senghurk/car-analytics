@@ -6,7 +6,7 @@ import HighlightedCars from './components/HighlightedCars';
 
 function App() {
   return (
-    <Router basename="/car-analytics/"> {/* Replace with your actual repo name */}
+    <Router basename="/car-analytics/">
       <div className="App">
         <AppBar position="static">
           <Toolbar>

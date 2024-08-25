@@ -11,7 +11,7 @@ import {
   PieController,
   BarController
 } from 'chart.js';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from '@mui/material';
 import carData from '../data/taladrod-cars.min.json';
 
 ChartJS.register(
@@ -29,11 +29,14 @@ ChartJS.register(
 const Dashboard = () => {
   const [brandData, setBrandData] = useState({});
   const [expandedBrands, setExpandedBrands] = useState({});
+  const [highlightedCars, setHighlightedCars] = useState([]);
   const pieChartRef = useRef(null);
   const barChartRef = useRef(null);
 
   useEffect(() => {
     const processedData = {};
+    const storedHighlightedCars = JSON.parse(localStorage.getItem('highlightedCars')) || [];
+    setHighlightedCars(storedHighlightedCars);
 
     carData.Cars.forEach(car => {
       const brand = car.NameMMT.split(' ')[0]; // Extract brand from NameMMT
@@ -54,12 +57,14 @@ const Dashboard = () => {
         processedData[brand].models[car.MdID] = {
           name: car.NameMMT,
           count: 0,
-          value: 0
+          value: 0,
+          carIds: []
         };
       }
 
       processedData[brand].models[car.MdID].count++;
       processedData[brand].models[car.MdID].value += parseInt(car.Prc.replace(/,/g, ''), 10);
+      processedData[brand].models[car.MdID].carIds.push(car.Cid);
     });
 
     setBrandData(processedData);
@@ -78,9 +83,20 @@ const Dashboard = () => {
     }));
   };
 
+  const toggleHighlight = (carId) => {
+    setHighlightedCars(prev => {
+      const newHighlightedCars = prev.includes(carId)
+        ? prev.filter(id => id !== carId)
+        : [...prev, carId];
+      
+      localStorage.setItem('highlightedCars', JSON.stringify(newHighlightedCars));
+      return newHighlightedCars;
+    });
+  };
+
   const renderCharts = () => {
     const brands = Object.values(brandData);
-    const colors = generateColors(brands.length);
+    const colors = generateColors(Math.max(...brands.map(brand => Object.keys(brand.models).length)));
 
     if (pieChartRef.current) {
       new ChartJS(pieChartRef.current, {
@@ -121,13 +137,19 @@ const Dashboard = () => {
         type: 'bar',
         data: {
           labels: brands.map(brand => brand.name),
-          datasets: brands.flatMap(brand =>
-            Object.values(brand.models).map(model => ({
-              label: model.name,
-              data: brands.map(b => b.name === brand.name ? model.count : 0),
-              backgroundColor: colors[brands.indexOf(brand)],
-            }))
-          )
+          datasets: brands.reduce((acc, brand) => {
+            Object.values(brand.models).forEach((model, index) => {
+              if (!acc[index]) {
+                acc[index] = {
+                  label: model.name,
+                  data: brands.map(() => 0),
+                  backgroundColor: colors[index],
+                };
+              }
+              acc[index].data[brands.indexOf(brand)] = model.count;
+            });
+            return acc;
+          }, [])
         },
         options: {
           responsive: true,
@@ -165,11 +187,9 @@ const Dashboard = () => {
   };
 
   const generateColors = (count) => {
-    const colors = [];
-    for (let i = 0; i < count; i++) {
-      colors.push(`hsl(${(i * 360) / count}, 70%, 50%)`);
-    }
-    return colors;
+    return Array.from({ length: count }, (_, i) => 
+      `hsl(${(i * 360) / count}, 70%, 50%)`
+    );
   };
 
   return (
@@ -188,6 +208,7 @@ const Dashboard = () => {
                     <TableCell>Brand/Model</TableCell>
                     <TableCell align="right">Number</TableCell>
                     <TableCell align="right">Value (THB)</TableCell>
+                    <TableCell align="center">Highlight Cars</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -200,12 +221,18 @@ const Dashboard = () => {
                         </TableCell>
                         <TableCell align="right">{brand.count}</TableCell>
                         <TableCell align="right">{brand.value.toLocaleString()}</TableCell>
+                        <TableCell></TableCell>
                       </TableRow>
                       {expandedBrands[brandName] && Object.entries(brand.models).map(([modelId, model]) => (
                         <TableRow key={`${brandName}-${modelId}`} style={{ backgroundColor: '#f5f5f5' }}>
                           <TableCell style={{ paddingLeft: '32px' }}>{model.name}</TableCell>
                           <TableCell align="right">{model.count}</TableCell>
                           <TableCell align="right">{model.value.toLocaleString()}</TableCell>
+                          <TableCell align="center">
+                            <Button onClick={() => toggleHighlight(model.carIds[0])} style={{ minWidth: 'auto' }}>
+                              {highlightedCars.includes(model.carIds[0]) ? '❤️' : '🤍'}
+                            </Button>
+                          </TableCell>
                         </TableRow>
                       ))}
                     </React.Fragment>
