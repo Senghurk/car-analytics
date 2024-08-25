@@ -2,7 +2,7 @@
 
 ## Description
 
-This is the project01 for WAD 1/2024.The Car Analytics Dashboard is a web-based application designed to provide insightful analytics and visualization of car market data.
+This is the project01 for WAD 1/2024. The Car Analytics Dashboard is a web-based application designed to provide insightful analytics and visualization of car market data.
 
 ## Screenshots
 
@@ -32,6 +32,9 @@ This is the project01 for WAD 1/2024.The Car Analytics Dashboard is a web-based 
 - Chart.js
 - Material-UI
 - React Router
+- Use Local Storage for persistence
+- Data is from the provided JSON file (No Backend)
+
 
 ## Getting Started
 
