@@ -14,13 +14,13 @@ function App() {
               Car Market Dashboard
             </Typography>
             <Button color="inherit" component={Link} to="/">Dashboard</Button>
-            <Button color="inherit" component={Link} to="/highlighted/#">Highlighted Cars</Button>
+            <Button color="inherit" component={Link} to="/highlighted">Highlighted Cars</Button>
           </Toolbar>
         </AppBar>
 
         <Routes>
           <Route path="/" element={<Dashboard />} />
-          <Route path="/highlighted/#" element={<HighlightedCars />} />
+          <Route path="/highlighted" element={<HighlightedCars />} />
         </Routes>
       </div>
     </Router>
