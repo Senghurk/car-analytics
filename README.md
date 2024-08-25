@@ -11,7 +11,7 @@ This is the project-01 for WAD 1/2024. The Car Analytics Dashboard is a web-base
 ![Dashboard Overview](screenshots/dashboard1.png "Dashboard showing car analytics")
 
 ### Brand Distribution Chart
-- Pie chart and Bar Chart showing distribution of car brands
+- Pie Chart and Bar Chart showing distribution of car brands
 ![Brand Distribution](screenshots/dashboard2.png "Pie chart and Bar Chart showing distribution of car brands")
 
 ### Highlighted Cars
@@ -25,7 +25,7 @@ This is the project-01 for WAD 1/2024. The Car Analytics Dashboard is a web-base
 - **Interactive Data Visualization**: Using Chart.js to create dynamic pie charts and bar graphs, showing a visual representation of car distribution by brands and models.
 - **Highlighted Cars Section**: A feature that enables users to mark and track specific cars of interest, with data persisting across sessions.
 
-## Technology Stack
+## Technology Used
 
 - React.js
 - Vite
