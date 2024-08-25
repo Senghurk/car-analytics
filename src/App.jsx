@@ -11,7 +11,7 @@ function App() {
         <AppBar position="static">
           <Toolbar>
             <Typography variant="h6" sx={{ flexGrow: 1 }}>
-              Car Market Dashboard
+              Car Market Analytics
             </Typography>
             <Button color="inherit" component={Link} to="/">Dashboard</Button>
             <Button color="inherit" component={Link} to="/highlighted">Highlighted Cars</Button>
