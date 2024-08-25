@@ -36,28 +36,30 @@ const Dashboard = () => {
     const processedData = {};
 
     carData.Cars.forEach(car => {
-      if (!processedData[car.MkID]) {
-        processedData[car.MkID] = {
-          name: car.Model,
+      const brand = car.NameMMT.split(' ')[0]; // Extract brand from NameMMT
+
+      if (!processedData[brand]) {
+        processedData[brand] = {
+          name: brand,
           count: 0,
           value: 0,
           models: {}
         };
       }
 
-      processedData[car.MkID].count++;
-      processedData[car.MkID].value += parseInt(car.Prc.replace(/,/g, ''), 10);
+      processedData[brand].count++;
+      processedData[brand].value += parseInt(car.Prc.replace(/,/g, ''), 10);
 
-      if (!processedData[car.MkID].models[car.MdID]) {
-        processedData[car.MkID].models[car.MdID] = {
+      if (!processedData[brand].models[car.MdID]) {
+        processedData[brand].models[car.MdID] = {
           name: car.NameMMT,
           count: 0,
           value: 0
         };
       }
 
-      processedData[car.MkID].models[car.MdID].count++;
-      processedData[car.MkID].models[car.MdID].value += parseInt(car.Prc.replace(/,/g, ''), 10);
+      processedData[brand].models[car.MdID].count++;
+      processedData[brand].models[car.MdID].value += parseInt(car.Prc.replace(/,/g, ''), 10);
     });
 
     setBrandData(processedData);
@@ -69,10 +71,10 @@ const Dashboard = () => {
     }
   }, [brandData]);
 
-  const toggleBrand = (brandId) => {
+  const toggleBrand = (brandName) => {
     setExpandedBrands(prev => ({
       ...prev,
-      [brandId]: !prev[brandId]
+      [brandName]: !prev[brandName]
     }));
   };
 
@@ -162,7 +164,6 @@ const Dashboard = () => {
     }
   };
 
-
   const generateColors = (count) => {
     const colors = [];
     for (let i = 0; i < count; i++) {
@@ -190,18 +191,18 @@ const Dashboard = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {Object.entries(brandData).map(([brandId, brand]) => (
-                    <React.Fragment key={brandId}>
-                      <TableRow onClick={() => toggleBrand(brandId)} style={{ cursor: 'pointer' }}>
+                  {Object.entries(brandData).map(([brandName, brand]) => (
+                    <React.Fragment key={brandName}>
+                      <TableRow onClick={() => toggleBrand(brandName)} style={{ cursor: 'pointer' }}>
                         <TableCell>
-                          <span style={{ marginRight: '8px' }}>{expandedBrands[brandId] ? '▼' : '►'}</span>
+                          <span style={{ marginRight: '8px' }}>{expandedBrands[brandName] ? '▼' : '►'}</span>
                           {brand.name}
                         </TableCell>
                         <TableCell align="right">{brand.count}</TableCell>
                         <TableCell align="right">{brand.value.toLocaleString()}</TableCell>
                       </TableRow>
-                      {expandedBrands[brandId] && Object.entries(brand.models).map(([modelId, model]) => (
-                        <TableRow key={`${brandId}-${modelId}`} style={{ backgroundColor: '#f5f5f5' }}>
+                      {expandedBrands[brandName] && Object.entries(brand.models).map(([modelId, model]) => (
+                        <TableRow key={`${brandName}-${modelId}`} style={{ backgroundColor: '#f5f5f5' }}>
                           <TableCell style={{ paddingLeft: '32px' }}>{model.name}</TableCell>
                           <TableCell align="right">{model.count}</TableCell>
                           <TableCell align="right">{model.value.toLocaleString()}</TableCell>
